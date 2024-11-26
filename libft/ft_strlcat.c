@@ -6,13 +6,13 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:37:34 by okhan             #+#    #+#             */
-/*   Updated: 2024/11/15 18:42:41 by okhan            ###   ########.fr       */
+/*   Updated: 2024/11/22 18:06:27 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#include "libft.h"
 
-size_t	ft_length(const char *str)
+static size_t	ft_length(const char *str)
 {
 	size_t	length;
 

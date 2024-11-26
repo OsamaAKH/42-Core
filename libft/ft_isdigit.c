@@ -6,11 +6,11 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 17:30:50 by okhan             #+#    #+#             */
-/*   Updated: 2024/11/12 17:45:33 by okhan            ###   ########.fr       */
+/*   Updated: 2024/11/19 22:36:54 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ctype.h>
+#include "libft.h"
 
 int	ft_isdigit(int c)
 {

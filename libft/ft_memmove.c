@@ -6,11 +6,11 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 17:08:13 by okhan             #+#    #+#             */
-/*   Updated: 2024/11/15 18:12:35 by okhan            ###   ########.fr       */
+/*   Updated: 2024/11/19 22:37:18 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#include "libft.h"
 
 static void	ft_forward(unsigned char *d, const unsigned char *s, size_t n)
 {

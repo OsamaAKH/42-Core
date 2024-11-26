@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 19:16:48 by okhan             #+#    #+#             */
-/*   Updated: 2024/11/20 22:21:30 by okhan            ###   ########.fr       */
+/*   Created: 2024/11/20 00:44:32 by okhan             #+#    #+#             */
+/*   Updated: 2024/11/20 01:03:43 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strdup(const char *s)
 {
-	unsigned char	ch;
+	size_t	i;
+	char	*dup;
 
-	ch = (unsigned char)c;
-	while (*s)
+	i = 0;
+	while (s[i])
+		i++;
+	i++;
+	dup = (char *)malloc(i * sizeof(char));
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (s[i])
 	{
-		if (*s == ch)
-			return ((char *)s);
-		s++;
+		dup[i] = s[i];
+		i++;
 	}
-	if (ch == '\0')
-		return ((char *)s);
-	return (NULL);
+	dup[i] = '\0';
+	return (dup);
 }
