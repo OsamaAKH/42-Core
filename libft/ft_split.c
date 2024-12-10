@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 19:26:00 by okhan             #+#    #+#             */
-/*   Updated: 2024/11/26 13:14:35 by okhan            ###   ########.fr       */
+/*   Updated: 2024/11/26 16:41:11 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static char	*next_word(const char *s, char c, size_t *i)
 	while (s[*i + len] && s[*i + len] != c)
 		len++;
 	word = ft_substr(s, *i, len);
-	*i = *i + len;
+	*i += len;
 	return (word);
 }
 

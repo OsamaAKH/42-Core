@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   str.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/12 19:02:56 by okhan             #+#    #+#             */
-/*   Updated: 2024/12/04 08:11:41 by okhan            ###   ########.fr       */
+/*   Created: 2024/12/06 18:32:15 by okhan             #+#    #+#             */
+/*   Updated: 2024/12/10 00:43:27 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/ft_printf.h"
 
-void	ft_bzero(void *s, size_t n)
+int	ft_putchar(char c)
 {
-	size_t		i;
-	unsigned char	*t;
+	write(1, &c, 1);
+	return (1);
+}
+
+int	ft_printstr(char *str)
+{
+	int	i;
 
 	i = 0;
-	t = (unsigned char *)s;
-	while (i < n)
+	if (str == NULL)
 	{
-		t[i] = 0;
-		i++;
+		write(1, "(null)", 6);
+		return (6);
 	}
+	while (str[i])
+	{
+		write(1, &str[i++], 1);
+	}
+	return (i);
 }
