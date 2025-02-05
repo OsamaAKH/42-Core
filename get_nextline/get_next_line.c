@@ -6,13 +6,13 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 02:11:49 by okhan             #+#    #+#             */
-/*   Updated: 2025/01/10 15:44:42 by okhan            ###   ########.fr       */
+/*   Updated: 2025/02/06 00:08:17 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*get_line(char *left_str)
+static char	*get_line(char *left_str)
 {
 	int		i;
 	char	*str;
@@ -40,7 +40,7 @@ char	*get_line(char *left_str)
 	return (str);
 }
 
-char	*new_left_str(char *left_str)
+static char	*new_left_str(char *left_str)
 {
 	int		i;
 	int		j;
@@ -66,7 +66,7 @@ char	*new_left_str(char *left_str)
 	return (str);
 }
 
-int	read_buffer(int fd, char **left_str, char *buff)
+static int	read_buffer(int fd, char **left_str, char *buff)
 {
 	int	rd_bytes;
 
@@ -105,8 +105,32 @@ char	*get_next_line(int fd)
 	if (rd_bytes == -1)
 		return (NULL);
 	if (rd_bytes == 0 && (!left_str || left_str[0] == '\0'))
+	{
+		free(left_str);
+		left_str = NULL;
 		return (NULL);
+	}
 	line = get_line(left_str);
 	left_str = new_left_str(left_str);
 	return (line);
 }
+
+// #include <fcntl.h>   // For open()
+
+// int	main()
+// {
+// 	int fd = open("test.txt", O_RDONLY);
+// 	if (fd == -1)
+// 		return (1);
+// 	char *line;
+// 	while ((line = get_next_line(fd)) != NULL)
+// 	{
+// 		write(1, line, ft_strlen(line));
+// 		free(line);  // Free allocated memory
+// 	}
+// 	printf("%s", line);
+// 	close(fd);  // Close the file
+// 	return (0);
+// }
+
+
