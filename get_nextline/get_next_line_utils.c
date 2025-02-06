@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:33:15 by okhan             #+#    #+#             */
-/*   Updated: 2025/02/03 23:12:18 by okhan            ###   ########.fr       */
+/*   Updated: 2025/02/07 00:33:06 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (NULL);
 	new_str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!new_str)
+	{
+		free(s1);
 		return (NULL);
+	}
 	new_str = str_copy(s1, s2, new_str);
 	free(s1);
 	return (new_str);

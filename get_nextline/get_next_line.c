@@ -6,11 +6,12 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 02:11:49 by okhan             #+#    #+#             */
-/*   Updated: 2025/02/06 00:08:17 by okhan            ###   ########.fr       */
+/*   Updated: 2025/02/07 00:39:21 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
 
 static char	*get_line(char *left_str)
 {
@@ -132,5 +133,3 @@ char	*get_next_line(int fd)
 // 	close(fd);  // Close the file
 // 	return (0);
 // }
-
-
