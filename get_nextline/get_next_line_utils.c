@@ -6,83 +6,107 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:33:15 by okhan             #+#    #+#             */
-/*   Updated: 2025/02/07 00:33:06 by okhan            ###   ########.fr       */
+/*   Updated: 2025/02/07 22:31:29 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(char *s)
+size_t	ft_strlen_gnl(const char *str)
 {
-	int	i;
+	size_t	len;
 
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i])
-		i++;
-	return (i);
+	len = 0;
+	while (str && str[len])
+		len++;
+	return (len);
 }
 
-char	*ft_strchr(char *s, int c)
+char	*ft_strdup_gnl(const char *src)
 {
-	unsigned char	ch;
+	char	*dst;
+	size_t	len;
+	size_t	i;
 
-	ch = (unsigned char)c;
-	if (!s)
+	len = ft_strlen_gnl(src);
+	dst = malloc(len + 1);
+	if (!dst)
 		return (NULL);
-	while (*s)
-	{
-		if (*s == ch)
-			return ((char *)s);
-		s++;
-	}
-	if (ch == '\0')
-		return ((char *)s);
-	return (NULL);
-}
-
-static char	*str_copy(char *s1, char *s2, char *new_str)
-{
-	int	i;
-	int	j;
-
 	i = 0;
-	while (s1[i])
+	while (i < len)
 	{
-		new_str[i] = s1[i];
+		dst[i] = src[i];
 		i++;
 	}
-	j = 0;
-	while (s2[j])
-	{
-		new_str[i + j] = s2[j];
-		j++;
-	}
-	new_str[i + j] = '\0';
-	return (new_str);
+	dst[i] = '\0';
+	return (dst);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_substr_gnl(char *s, unsigned int start, size_t len)
 {
-	char	*new_str;
+	char	*substr;
+	size_t	s_len;
+	size_t	i;
 
-	if (!s1)
-	{
-		s1 = (char *)malloc(1);
-		if (!s1)
-			return (NULL);
-		s1[0] = '\0';
-	}
-	if (!s2)
+	if (!s)
 		return (NULL);
-	new_str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!new_str)
+	s_len = ft_strlen_gnl(s);
+	if (start >= s_len)
+		return (ft_strdup_gnl(""));
+	if (len > s_len - start)
+		len = s_len - start;
+	substr = malloc(len + 1);
+	if (!substr)
+		return (NULL);
+	i = 0;
+	while (i < len)
 	{
+		substr[i] = s[start + i];
+		i++;
+	}
+	substr[i] = '\0';
+	return (substr);
+}
+
+char	*ft_strjoin_gnl(char *s1, char *s2)
+{
+	char	*join;
+	size_t	len1;
+	size_t	len2;
+	size_t	i;
+	size_t	j;
+
+	if (!s1 && !s2)
+		return (NULL);
+	len1 = ft_strlen_gnl(s1);
+	len2 = ft_strlen_gnl(s2);
+	join = malloc(len1 + len2 + 1);
+	if (!join)
+		return (NULL);
+	i = -1;
+	while (++i < len1)
+		join[i] = s1[i];
+	j = -1;
+	while (++j < len2)
+		join[len1 + j] = s2[j];
+	join[len1 + len2] = '\0';
+	if (!s1 || !s2)
 		free(s1);
-		return (NULL);
+	return (join);
+}
+
+int	ft_find_newline(const char *str)
+{
+	size_t	i;
+
+	if (!str)
+		return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (1);
+		i++;
 	}
-	new_str = str_copy(s1, s2, new_str);
-	free(s1);
-	return (new_str);
+	return (0);
 }

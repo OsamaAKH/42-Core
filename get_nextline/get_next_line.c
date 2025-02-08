@@ -6,130 +6,101 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 02:11:49 by okhan             #+#    #+#             */
-/*   Updated: 2025/02/07 00:39:21 by okhan            ###   ########.fr       */
+/*   Updated: 2025/02/07 22:53:32 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-
-static char	*get_line(char *left_str)
+static char	*extract_line(char *buffer)
 {
-	int		i;
-	char	*str;
+	char	*line;
+	int		len;
 
-	i = 0;
-	if (!left_str)
+	if (!buffer)
 		return (NULL);
-	while (left_str[i] && left_str[i] != '\n')
-		i++;
-	str = (char *)malloc(sizeof(char) * (i + 2));
-	if (!str)
+	len = 0;
+	while (buffer[len] && buffer[len] != '\n')
+		len++;
+	len += (buffer[len] == '\n');
+	line = malloc(len + 1);
+	if (!line)
 		return (NULL);
-	i = 0;
-	while (left_str[i] && left_str[i] != '\n')
+	len = 0;
+	while (buffer[len] && buffer[len] != '\n')
 	{
-		str[i] = left_str[i];
-		i++;
+		line[len] = buffer[len];
+		len++;
 	}
-	if (left_str[i] == '\n')
-	{
-		str[i] = left_str[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
+	if (buffer[len] == '\n')
+		line[len++] = '\n';
+	line[len] = '\0';
+	return (line);
 }
 
-static char	*new_left_str(char *left_str)
+static char	*trim_remainder(char *buffer)
 {
-	int		i;
-	int		j;
-	char	*str;
+	char	*new_buffer;
+	int		len;
+	int		start;
 
-	i = 0;
-	while (left_str[i] && left_str[i] != '\n')
-		i++;
-	if (!left_str[i])
+	if (!buffer)
+		return (NULL);
+	len = 0;
+	while (buffer[len] && buffer[len] != '\n')
+		len++;
+	if (!buffer[len])
 	{
-		free(left_str);
+		free(buffer);
 		return (NULL);
 	}
-	str = (char *)malloc(ft_strlen(left_str) - i);
-	if (!str)
-		return (NULL);
-	i++;
-	j = 0;
-	while (left_str[i])
-		str[j++] = left_str[i++];
-	str[j] = '\0';
-	free(left_str);
-	return (str);
+	start = len + 1;
+	new_buffer = ft_strdup_gnl(buffer + start);
+	free(buffer);
+	return (new_buffer);
 }
 
-static int	read_buffer(int fd, char **left_str, char *buff)
+static char	*read_buffer(int fd, char *remainder)
 {
-	int	rd_bytes;
+	char	*buffer;
+	char	*temp;
+	int		bytes_read;
 
-	rd_bytes = 1;
-	while ((!*left_str || !ft_strchr(*left_str, '\n')) && rd_bytes != 0)
+	buffer = malloc(BUFFER_SIZE + 1);
+	if (!buffer)
+		return (NULL);
+	while (!ft_find_newline(remainder))
 	{
-		rd_bytes = read(fd, buff, BUFFER_SIZE);
-		if (rd_bytes == -1)
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read <= 0)
 		{
-			free(buff);
-			if (*left_str)
-				free(*left_str);
-			*left_str = NULL;
-			return (-1);
+			free(buffer);
+			return (remainder);
 		}
-		buff[rd_bytes] = '\0';
-		*left_str = ft_strjoin(*left_str, buff);
+		buffer[bytes_read] = '\0';
+		temp = ft_strjoin_gnl(remainder, buffer);
+		free (remainder);
+		remainder = temp;
 	}
-	free(buff);
-	return (rd_bytes);
+	free(buffer);
+	return (remainder);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*left_str;
+	static char	*remainder = NULL;
 	char		*line;
-	char		*buff;
-	int			rd_bytes;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
-	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buff)
 		return (NULL);
-	rd_bytes = read_buffer(fd, &left_str, buff);
-	if (rd_bytes == -1)
-		return (NULL);
-	if (rd_bytes == 0 && (!left_str || left_str[0] == '\0'))
+	remainder = read_buffer(fd, remainder);
+	if (!remainder || !*remainder)
 	{
-		free(left_str);
-		left_str = NULL;
+		free(remainder);
+		remainder = NULL;
 		return (NULL);
 	}
-	line = get_line(left_str);
-	left_str = new_left_str(left_str);
+	line = extract_line(remainder);
+	remainder = trim_remainder(remainder);
 	return (line);
 }
-
-// #include <fcntl.h>   // For open()
-
-// int	main()
-// {
-// 	int fd = open("test.txt", O_RDONLY);
-// 	if (fd == -1)
-// 		return (1);
-// 	char *line;
-// 	while ((line = get_next_line(fd)) != NULL)
-// 	{
-// 		write(1, line, ft_strlen(line));
-// 		free(line);  // Free allocated memory
-// 	}
-// 	printf("%s", line);
-// 	close(fd);  // Close the file
-// 	return (0);
-// }
