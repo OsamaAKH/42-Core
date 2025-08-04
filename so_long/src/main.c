@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 18:52:37 by okhan             #+#    #+#             */
-/*   Updated: 2025/08/04 14:45:13 by okhan            ###   ########.fr       */
+/*   Updated: 2025/08/04 14:48:59 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	ft_error_exit(t_game *game, char *msg)
 {
-	if (game && game->map.lines)
-		free_map(game->map.lines);
 	write(2, "Error\n", 6);
 	write(2, msg, ft_strlen(msg));
 	write(2, "\n", 1);
