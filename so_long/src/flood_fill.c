@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 20:18:51 by okhan             #+#    #+#             */
-/*   Updated: 2025/07/28 20:19:23 by okhan            ###   ########.fr       */
+/*   Updated: 2025/08/04 16:40:24 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	**copy_map(t_game *game)
 
 	map_copy = malloc(sizeof(char *) * (game->map.rows + 1));
 	if (!map_copy)
-		ft_error_exit("Malloc failed");
+		ft_error_exit(game, "Malloc failed");
 	i = 0;
 	while (i < game->map.rows)
 	{
@@ -42,7 +42,7 @@ static char	**copy_map(t_game *game)
 			while (--i >= 0)
 				free(map_copy[i]);
 			free(map_copy);
-			ft_error_exit("Malloc failed");
+			ft_error_exit(game, "Malloc failed");
 		}
 		i++;
 	}
@@ -50,17 +50,10 @@ static char	**copy_map(t_game *game)
 	return (map_copy);
 }
 
-static void	free_map_copy(char **map_copy, int rows)
+static void	exit_unreachable(t_game *game, char **map_copy, const char *msg)
 {
-	int	i;
-
-	i = 0;
-	while (i < rows)
-	{
-		free(map_copy[i]);
-		i++;
-	}
-	free(map_copy);
+	free_map_copy(map_copy, game->map.rows);
+	ft_error_exit(game, msg);
 }
 
 static void	check_items_reachable(t_game *game, char **map_copy)
@@ -87,9 +80,9 @@ static void	check_items_reachable(t_game *game, char **map_copy)
 		i++;
 	}
 	if (collectibles_found != game->map.c)
-		ft_error_exit("Not all collectibles are reachable");
+		exit_unreachable(game, map_copy, "Not all collectibles are reachable");
 	if (!exit_found)
-		ft_error_exit("Exit is not reachable");
+		exit_unreachable(game, map_copy, "Exit is not reachable");
 }
 
 void	check_reachability(t_game *game)
@@ -97,7 +90,8 @@ void	check_reachability(t_game *game)
 	char	**map_copy;
 
 	map_copy = copy_map(game);
-	flood_fill_rec(map_copy, game->player.actual.x, game->player.actual.y, game);
+	flood_fill_rec(map_copy, game->player.actual.x, game->player.actual.y, \
+		game);
 	check_items_reachable(game, map_copy);
 	free_map_copy(map_copy, game->map.rows);
 }

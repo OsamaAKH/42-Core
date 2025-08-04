@@ -6,12 +6,11 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:33:15 by okhan             #+#    #+#             */
-/*   Updated: 2025/07/28 22:14:52 by okhan            ###   ########.fr       */
+/*   Updated: 2025/08/04 16:31:29 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/so_long.h"
-
 
 size_t	ft_strlen_gnl(const char *str)
 {
@@ -84,18 +83,12 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 	join = malloc(len1 + len2 + 1);
 	if (!join)
 		return (NULL);
-	i = 0;
-	while (i < len1)
-	{
+	i = -1;
+	while (++i < len1)
 		join[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (j < len2)
-	{
+	j = -1;
+	while (++j < len2)
 		join[len1 + j] = s2[j];
-		j++;
-	}
 	join[len1 + len2] = '\0';
 	return (join);
 }

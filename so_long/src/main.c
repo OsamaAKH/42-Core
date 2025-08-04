@@ -6,19 +6,11 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 18:52:37 by okhan             #+#    #+#             */
-/*   Updated: 2025/08/04 14:48:59 by okhan            ###   ########.fr       */
+/*   Updated: 2025/08/04 17:37:41 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/so_long.h"
-
-void	ft_error_exit(t_game *game, char *msg)
-{
-	write(2, "Error\n", 6);
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-	exit(1);
-}
 
 int	close_window(t_game *game)
 {
@@ -32,6 +24,8 @@ int	close_window(t_game *game)
 		mlx_destroy_image(game->mlx, game->e);
 	if (game->p)
 		mlx_destroy_image(game->mlx, game->p);
+	if (game->floor)
+		mlx_destroy_image(game->mlx, game->floor);
 	if (game->win)
 		mlx_destroy_window(game->mlx, game->win);
 	if (game->mlx)
@@ -66,8 +60,8 @@ static void	init_game(t_game *game)
 	game->c = NULL;
 	game->e = NULL;
 	game->p = NULL;
+	game->floor = NULL;
 	game->map.lines = NULL;
-	game->lines = NULL;
 	game->map.p = 0;
 	game->map.e = 0;
 	game->map.c = 0;
@@ -82,10 +76,10 @@ static void	validate_args(int argc, char **argv)
 	int	len;
 
 	if (argc != 2)
-		ft_error_exit("Usage: ./so_long <map.ber>");
+		ft_error_exit(NULL, "Usage: ./so_long <map.ber>");
 	len = ft_strlen(argv[1]);
 	if (len < 4 || ft_strncmp(argv[1] + len - 4, ".ber", 4) != 0)
-		ft_error_exit("Map file must have .ber extension");
+		ft_error_exit(NULL, "Map file must have .ber extension");
 }
 
 int	main(int argc, char **argv)
@@ -98,11 +92,11 @@ int	main(int argc, char **argv)
 	validate_map(&game);
 	game.mlx = mlx_init();
 	if (!game.mlx)
-		ft_error_exit("MiniLibX init failed");
+		ft_error_exit(&game, "MiniLibX init failed");
 	game.win = mlx_new_window(game.mlx, game.map.cols * TILE_SIZE,
 			game.map.rows * TILE_SIZE, "so_long");
 	if (!game.win)
-		ft_error_exit("Window creation failed");
+		ft_error_exit(&game, "Window creation failed");
 	load_images(&game);
 	render_map(&game);
 	mlx_key_hook(game.win, key_hook, &game);

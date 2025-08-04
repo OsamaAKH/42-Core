@@ -6,12 +6,11 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:36:46 by okhan             #+#    #+#             */
-/*   Updated: 2025/07/29 00:52:23 by okhan            ###   ########.fr       */
+/*   Updated: 2025/08/04 16:24:45 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/so_long.h"
-
 
 static int	is_valid_move(t_game *game, int new_x, int new_y)
 {
@@ -42,25 +41,29 @@ static void	handle_exit(t_game *game, int new_x, int new_y)
 			ft_printf("You won in %d moves!\n", game->player.moves + 1);
 			close_window(game);
 		}
-		return ;
 	}
-	game->map.lines[game->player.actual.y][game->player.actual.x] = '0';
-	game->map.lines[new_y][new_x] = 'P';
 	game->player.actual.x = new_x;
 	game->player.actual.y = new_y;
 }
 
 void	move_player(t_game *game, int dx, int dy)
 {
-	int		new_x;
-	int		new_y;
+	int	new_x;
+	int	new_y;
+	int	old_x;
+	int	old_y;
 
-	new_x = game->player.actual.x + dx;
-	new_y = game->player.actual.y + dy;
+	old_x = game->player.actual.x;
+	old_y = game->player.actual.y;
+	new_x = old_x + dx;
+	new_y = old_y + dy;
 	if (!is_valid_move(game, new_x, new_y))
 		return ;
+	render_tile(game, game->map.lines[old_y][old_x], old_x, old_y);
 	handle_collectible(game, new_x, new_y);
 	handle_exit(game, new_x, new_y);
+	game->player.actual.x = new_x;
+	game->player.actual.y = new_y;
 	game->player.moves++;
 	ft_printf("Moves: %d\n", game->player.moves);
 	render_map(game);

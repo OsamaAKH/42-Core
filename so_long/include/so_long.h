@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:24:09 by okhan             #+#    #+#             */
-/*   Updated: 2025/08/04 14:24:13 by okhan            ###   ########.fr       */
+/*   Updated: 2025/08/04 17:42:42 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,18 @@ typedef struct s_map
 
 typedef struct s_game
 {
-	char		**lines;
 	void		*o;
 	void		*c;
 	void		*e;
 	void		*p;
+	void		*floor;
 	void		*mlx;
 	void		*win;
 	t_player	player;
 	t_map		map;
 }	t_game;
 
-void	ft_error_exit(char *msg);
+void	ft_error_exit(t_game *game, const char *msg);
 int		close_window(t_game *game);
 int		key_hook(int keycode, t_game *game);
 void	read_map(t_game *game, char *filename);
@@ -76,5 +76,7 @@ char	*ft_strdup_gnl(const char *src);
 char	*ft_substr_gnl(char *s, unsigned int start, size_t len);
 char	*ft_strjoin_gnl(char *s1, char *s2);
 int		ft_find_newline(const char *str);
+void	free_map_copy(char **map_copy, int rows);
+void	render_tile(t_game *game, char tile, int x, int y);
 
 #endif
