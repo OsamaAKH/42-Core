@@ -6,49 +6,55 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 17:59:52 by okhan             #+#    #+#             */
-/*   Updated: 2025/07/21 18:07:12 by okhan            ###   ########.fr       */
+/*   Updated: 2025/08/17 21:08:36 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "unistd.h"
+#include <unistd.h>
 
-void	ft_putchar(char c)
+int ft_isspace(char c)
 {
-	write (1, &c, 1);
+    if (c <= 32)
+        return (1);
+    return (0);
 }
 
-char	isspace(char c)
+void ft_putchar(char c)
 {
-	return(c == ' ' || c == '\t' || c == '\0');
+    write(1, &c, 1);
 }
 
-void	r_capitalizer(char *str)
+void r_capitalizer(char *s)
 {
-	int i = 0;
-
-	while (str[i])
-	{
-		if (str[i] >= 'A' && str[i] <= 'Z')
-			str[i] += 32;
-		else if(str[i] >= 'a' && str[i] <= 'z' && isspace(str[i + 1]))
-			str[i] -= 32;
-		ft_putchar(str[i++]);
-	}
+    int i = 0;
+    while (s[i])
+    {
+         // If the character is uppercase, make it lowercase
+         if (s[i] >= 'A' && s[i] <= 'Z')
+             s[i] += 32;
+         // Now check for lowercase character and if the next char
+         // is a space character, make it uppercase again
+         if ((s[i] >= 'a' && s[i] <= 'z') && ft_isspace(s[i + 1]))
+             s[i] -= 32;
+         // Now print every char
+         ft_putchar(s[i++]);
+    }
 }
 
-int	main(int argc, char **argv)
+int main(int ac, char **av)
 {
-	int i = 1;
-	if (argc < 2)
-		ft_putchar('\n');
-	else
-	{
-		while (i < argc)
-		{
-			r_capitalizer(argv[i]);
-			ft_putchar('\n');
-			i++;
-		}
-	}
-	return 0;	
+    int i = 1;
+    if (ac == 1)
+        ft_putchar('\n');
+    else
+    {
+        // Loop over all params starting at 1 (we don't want the name of
+        // the executable to be written to the screen)
+        while (i < ac)
+        {
+            r_capitalizer(av[i]);
+            ft_putchar('\n');
+            i++;
+        } 
+    }
 }
