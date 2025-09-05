@@ -6,18 +6,18 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 15:04:20 by okhan             #+#    #+#             */
-/*   Updated: 2025/07/21 15:09:59 by okhan            ###   ########.fr       */
+/*   Updated: 2025/09/03 14:06:51 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "unistd.h"
 
-int	ft_atoi_base(const char *str, int str_base)
+int	ft_atoi_base(const char *str,unsigned int str_base)
 {
 	int i = 0;
 	int result = 0;
 	int sign = 1;
-	int value;
+	unsigned int value = 0;
 
 	if (str_base < 2 || str_base > 16)
 		return (0);

@@ -6,12 +6,19 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 21:24:10 by okhan             #+#    #+#             */
-/*   Updated: 2025/08/16 21:25:18 by okhan            ###   ########.fr       */
+/*   Updated: 2025/08/31 17:08:35 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef FT_LIST_H
+# define FT_LIST_H
 
 typedef struct s_list
 {
 	void	*data;
 	struct s_list	*next;
-}	t_list;
+	
+}			t_list;
+
+
+#endif
