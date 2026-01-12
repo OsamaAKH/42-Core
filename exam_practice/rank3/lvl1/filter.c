@@ -5,80 +5,61 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/16 00:49:21 by okhan             #+#    #+#             */
-/*   Updated: 2025/10/16 01:15:05 by okhan            ###   ########.fr       */
+/*   Created: 2026/01/12 17:46:15 by okhan             #+#    #+#             */
+/*   Updated: 2026/01/12 17:59:49 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
+#include "unistd.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
 
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	if (ac != 2)
-	{
-		fprintf(stderr, "Usage: %s <word>\n", av[0]);
-		return 1;
-	}
-
-	char *word = av[1];
-	int word_len = strlen(word);
-
-	if (word_len == 0)
-	{
-		return 0;
-	}
-
-	char *inpput = NULL;
-	int total = 0;
+	char *input = NULL;
 	char buff[1024];
-	int bytes;
+	ssize_t bytes;
+	size_t len = 0, i , j;
 
+	if (ac != 2 || !(*av[1]))
+		return 1;
 	while ((bytes = read(0, buff, sizeof(buff))) > 0)
 	{
-		char *tmp = realloc(inpput, total + bytes);
-
+		char *tmp = realloc(input, len + bytes);
 		if (!tmp)
+			return(perror("Error"), free(input), 1);
+		input = tmp;
+		i = 0;
+		while (i < (size_t)bytes)
 		{
-			fprintf(stderr, "Error: %s\n", strerror(errno));
-			free(inpput);
-			return 1;
+			input[len++] = buff[i++];
 		}
-
-		inpput = tmp;
-		memmove(inpput + total, buff, bytes);
-		total += bytes;
 	}
-
 	if (bytes < 0)
+		return (perror("Error"), free(input), 1);
+	i = 0;
+	while (i < len)
 	{
-		fprintf(stderr, "Error: %s\n", strerror(errno));
-		free(inpput);
-		return 1;
-	}
-	
-	char *p = inpput;
-	char *match;
-
-	while ((match = memmem(p, inpput + total - p, word, word_len)))
-	{
-		write(1, p, match - p);
-
-		int i = 0;
-		while (i < word_len)
+		j = 0;
+		while (av[1][j] && i + j < len && input[i + j] == av[1][j])
 		{
-			write(1, "*", 1);
-			i++;
+			j++;
 		}
-		p = match + word_len;
+		if (!(av[1][j]))
+		{
+			while (j--)
+			{
+				printf("*");
+			}
+			i += strlen(av[1]);
+		}
+		else
+		{
+			printf("%c", input[i++]);
+		}
 	}
-
-	write(1, p, inpput + total - p);
-	free(inpput);
-
+	free(input);
 	return 0;
 }

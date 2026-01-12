@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 16:00:33 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/02 16:08:41 by okhan            ###   ########.fr       */
+/*   Updated: 2026/01/12 18:51:06 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void	print(char *s, int n)
 	write(1, "\n", 1);
 }
 
-void	sort_string(char *s)
+void	sort_string(char *s, int start)
 {
 	int i;
 	int j;
 
-	i = 0;
+	i = start;
 
 	while (s[i])
 	{
@@ -70,6 +70,7 @@ void	permute(char *s, int left, int right)
 	while (i <= right)
 	{
 		ft_swap(&s[left], &s[i]);
+		sort_string(s, left + 1);
 		permute(s, left + 1, right);
 		ft_swap(&s[left], &s[i]);
 		i++;
@@ -99,7 +100,7 @@ int main(int ac, char **av)
 
 	s[i] = '\0';
 
-	sort_string(s);
+	sort_string(s, 0);
 
 	permute(s, 0, len - 1);
 	free(s);
