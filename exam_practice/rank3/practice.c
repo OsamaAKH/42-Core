@@ -5,78 +5,110 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/12 20:11:26 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/12 20:38:36 by okhan            ###   ########.fr       */
+/*   Created: 2026/01/15 10:54:01 by okhan             #+#    #+#             */
+/*   Updated: 2026/01/15 11:51:37 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "stdio.h"
+#include "unistd.h"
 #include "stdlib.h"
-#include "math.h"
 
-typedef struct s_city
+void	print(char *s)
 {
-	float x;
-	float y;
-}t_city;
-
-float dis(t_city a, t_city b)
-{
-	float dx = a.x - b.x;
-	float dy = a.y - b.y;
-	return(sqrtf(dx * dx + dy * dy));
+	int i = 0;
+	while (s[i])
+	{
+		write(1, &s[i++], 1);
+	}
+	write (1, "\n", 1);
 }
 
-static float g_min = -1;
-
-void	backtrack(t_city *city, int *used, int n, int cur, int count, float total)
+void	count_rm(char *s, int *rm_o, int *rm_c)
 {
-	int i ;
-	if (count == n)
+	int open = 0;
+	int i = 0;
+
+	*rm_o = 0;
+	*rm_c = 0;
+	while (s[i])
 	{
-		total += dis(city[cur], city[0]);
-		if (g_min < 0 ||total < g_min)
-			g_min = total;
-		return ;
-	}
-	i = 1;
-	while (i < n)
-	{
-		if (!used[i])
+		if (s[i] == '(')
+			open++;
+		else if (s[i] == ')')
 		{
-			used[i] = 1;
-			backtrack(city, used, n, i, count + 1, total + dis(city[cur], city[i]));
-			used[i] = 0;
+			if (open > 0)
+				open--;
+			else
+				(*rm_c)++;
 		}
 		i++;
 	}
-	
+	*rm_o = open;
 }
 
-int main(int ac, char ** av)
+void backtrack(char *s, int i, int open, int rm_open, int rm_close, char *res)
 {
-	t_city *city;
-	int *used;
-	int n;
+    if (!s[i])
+    {
+        if (open == 0) // The rm_open/rm_close check is implicitly handled by the recursion
+            print(res);
+        return;
+    }
 
-	n = 0;
-	city = malloc(sizeof(t_city)*11);
-	used= calloc (11, sizeof(int));
-	if (!used || city)
-		return 1;
-	while (fscanf(stdin, "%f, %f\n", &city[n].x, &city[n].y) == 2)
-	{
-		n++;
-	}
-	if (n < 2)
-	{
-		printf("0.00\n");
+    // Decision for the current character s[i]
+    if (s[i] == '(')
+    {
+        // Path 1: Remove it (if we still have removals left)
+        if (rm_open > 0)
+        {
+            res[i] = ' ';
+            backtrack(s, i + 1, open, rm_open - 1, rm_close, res);
+        }
+        
+        // Path 2: Keep it
+        res[i] = '(';
+        backtrack(s, i + 1, open + 1, rm_open, rm_close, res);
+    }
+    else if (s[i] == ')')
+    {
+        // Path 1: Remove it (if we still have removals left)
+        if (rm_close > 0)
+        {
+            res[i] = ' ';
+            backtrack(s, i + 1, open, rm_open, rm_close - 1, res);
+        }
+
+        // Path 2: Keep it (only if it's valid to do so)
+        if (open > 0)
+        {
+            res[i] = ')';
+            backtrack(s, i + 1, open - 1, rm_open, rm_close, res);
+        }
+    }
+    else // Character is not a parenthesis
+    {
+        res[i] = s[i];
+        backtrack(s, i + 1, open, rm_open, rm_close, res);
+    }
+}
+
+
+int main (int ac, char **av)
+{
+	int rm_open;
+	int rm_close;
+	char res[1024];
+	int i;
+	if (ac != 2)
 		return 0;
+	count_rm(av[1], &rm_open, &rm_close);
+	i = 0;
+	while (av[1][i])
+	{
+		res[i] = av[1][i];
+		i++;
 	}
-	used[0] = 1;
-	backtrack(city, used, n, 0, 1, 0.00);
-	printf("%.2f\n", g_min);
-	free(city);
-	free(used);
+	res[i] = '\0';
+	backtrack(av[1], 0, 0, rm_open, rm_close, res);
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 16:00:33 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/12 18:51:06 by okhan            ###   ########.fr       */
+/*   Updated: 2026/01/15 10:49:34 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int main(int ac, char **av)
 	s = malloc(len + 1);
 
 	if (!s)
-		return 0;
+		return 1;
 	i = 0;
 	while (i < len)
 	{

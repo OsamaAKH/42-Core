@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 15:41:11 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/04 15:51:22 by okhan            ###   ########.fr       */
+/*   Updated: 2026/01/14 01:56:28 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,36 +46,45 @@ void	count_remove(char *s, int *rm_open, int *rm_close)
 
 void	backtrack(char *s, int open, int i, int rm_open, int rm_close, char *res)
 {
+	char	next[1024];
 	if (!s[i])
 	{
 		if (open == 0 && rm_open == 0 && rm_close == 0)
 			putstr(res);
 		return ;
 	}
+	int k = 0;
+	while (res[k])
+	{
+		next[k] = res[k];
+		k++;
+	}
+	next[k] = '\0';
+	
 	if (s[i] == '(' && rm_open > 0)
 	{
-		res[i] = ' ';
-		backtrack(s, open, i + 1, rm_open - 1, rm_close, res);
+		next[i] = ' ';
+		backtrack(s, open, i + 1, rm_open - 1, rm_close, next);
 	}
 	if (s[i] == ')' && rm_close > 0)
 	{
-		res[i] = ' ';
-		backtrack(s, open, i + 1, rm_open, rm_close - 1, res);
+		next[i] = ' ';
+		backtrack(s, open, i + 1, rm_open, rm_close - 1, next);
 	}
 		if (s[i] == '(' )
 	{
-		res[i] = '(';
-		backtrack(s, open + 1, i + 1, rm_open, rm_close, res);
+		next[i] = '(';
+		backtrack(s, open + 1, i + 1, rm_open, rm_close, next);
 	}
 		if (s[i] == ')' && open > 0)
 	{
-		res[i] = ')';
-		backtrack(s, open - 1, i + 1, rm_open, rm_close, res);
+		next[i] = ')';
+		backtrack(s, open - 1, i + 1, rm_open, rm_close, next);
 	}
 		if (s[i] != '(' && s[i] != ')')
 	{
-		res[i] = s[i];
-		backtrack(s, open, i + 1, rm_open, rm_close, res);
+		next[i] = s[i];
+		backtrack(s, open, i + 1, rm_open, rm_close, next);
 	}
 }
 
