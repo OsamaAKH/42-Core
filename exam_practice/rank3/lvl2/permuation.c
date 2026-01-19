@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 16:00:33 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/15 10:49:34 by okhan            ###   ########.fr       */
+/*   Updated: 2026/01/19 21:05:09 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void	print(char *s, int n)
 	write(1, "\n", 1);
 }
 
-void	sort_string(char *s, int start)
+void	sort_string(char *s)
 {
 	int i;
 	int j;
 
-	i = start;
+	i = 0;
 
 	while (s[i])
 	{
@@ -60,7 +60,6 @@ void	sort_string(char *s, int start)
 void	permute(char *s, int left, int right)
 {
 	int i;
-
 	if (left == right)
 	{
 		print(s, right + 1);
@@ -70,8 +69,9 @@ void	permute(char *s, int left, int right)
 	while (i <= right)
 	{
 		ft_swap(&s[left], &s[i]);
-		sort_string(s, left + 1);
+		sort_string(s + left + 1);
 		permute(s, left + 1, right);
+		sort_string(s + left + 1);
 		ft_swap(&s[left], &s[i]);
 		i++;
 	}
@@ -79,30 +79,13 @@ void	permute(char *s, int left, int right)
 
 int main(int ac, char **av)
 {
-	int len;
-	char *s;
+	
 	int i;
 
 	if (ac != 2)
 		return 0;
 
-	len = ft_len(av[1]);
-	s = malloc(len + 1);
-
-	if (!s)
-		return 1;
-	i = 0;
-	while (i < len)
-	{
-		s[i] = av[1][i];
-		i++;
-	}
-
-	s[i] = '\0';
-
-	sort_string(s, 0);
-
-	permute(s, 0, len - 1);
-	free(s);
+	sort_string(av[1]);
+	permute(av[1], 0, ft_len(av[1]) - 1);
 	return 0;
 }

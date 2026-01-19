@@ -5,28 +5,26 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/04 15:41:11 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/14 01:56:28 by okhan            ###   ########.fr       */
+/*   Created: 2026/01/19 20:50:34 by okhan             #+#    #+#             */
+/*   Updated: 2026/01/19 20:58:56 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "unistd.h"
 
-void	putstr(char *s)
+void put_str(char *s)
 {
-	int i = 0;
-	while(s[i])
+	int i= 0;
+	while (s[i])
 		write(1, &s[i++], 1);
 	write(1, "\n", 1);
 }
 
-void	count_remove(char *s, int *rm_open, int *rm_close)
+int val(char *s)
 {
-	int i = 0;
 	int open = 0;
-
-	*rm_open = 0;
-	*rm_close = 0;
+	int close = 0;
+	int i = 0;
 
 	while (s[i])
 	{
@@ -34,77 +32,48 @@ void	count_remove(char *s, int *rm_open, int *rm_close)
 			open++;
 		else if (s[i] == ')')
 		{
-			if (s[i] == ')' && open > 0)
+			if (open > 0)
 				open--;
-			else
-				(*rm_close)++;
+			else 
+				close++;
 		}
 		i++;
 	}
-	*rm_open = open;
+	return (open + close);
 }
 
-void	backtrack(char *s, int open, int i, int rm_open, int rm_close, char *res)
+void	solve(char *s, int m_fix, int to_fix, int pos)
 {
-	char	next[1024];
-	if (!s[i])
+	int i;
+	char c;
+
+	if (m_fix == to_fix && val(s) == 0)
 	{
-		if (open == 0 && rm_open == 0 && rm_close == 0)
-			putstr(res);
+		put_str(s);
 		return ;
 	}
-	int k = 0;
-	while (res[k])
+
+	i = pos;
+	while (s[i])
 	{
-		next[k] = res[k];
-		k++;
-	}
-	next[k] = '\0';
-	
-	if (s[i] == '(' && rm_open > 0)
-	{
-		next[i] = ' ';
-		backtrack(s, open, i + 1, rm_open - 1, rm_close, next);
-	}
-	if (s[i] == ')' && rm_close > 0)
-	{
-		next[i] = ' ';
-		backtrack(s, open, i + 1, rm_open, rm_close - 1, next);
-	}
-		if (s[i] == '(' )
-	{
-		next[i] = '(';
-		backtrack(s, open + 1, i + 1, rm_open, rm_close, next);
-	}
-		if (s[i] == ')' && open > 0)
-	{
-		next[i] = ')';
-		backtrack(s, open - 1, i + 1, rm_open, rm_close, next);
-	}
-		if (s[i] != '(' && s[i] != ')')
-	{
-		next[i] = s[i];
-		backtrack(s, open, i + 1, rm_open, rm_close, next);
+		if (s[i] == '(' || s[i] == ')')
+		{
+			c = s[i];
+			s[i] = ' ';
+			solve(s, m_fix, to_fix + 1, i + 1);
+			s[i] = c;
+		}
+		i++;
 	}
 }
 
 int main(int ac, char **av)
 {
-	int rm_open;
-	int rm_close;
-	char res[1024];
-	int i;
+	int m_fix;
 
 	if (ac != 2)
-		return 0;
-	i = 0;
-	while (av[1][i])
-	{
-		res[i] = av[1][i];
-		i++;
-	}
-	res[i] = '\0';
-	count_remove(av[1], &rm_open, &rm_close);
-	backtrack(av[1], 0, 0, rm_open, rm_close, res);
+		return 1;
+	m_fix = val(av[1]);
+	solve(av[1], m_fix, 0, 0);
 	return 0;
 }
