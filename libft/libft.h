@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 22:19:04 by okhan             #+#    #+#             */
-/*   Updated: 2024/11/26 14:27:08 by okhan            ###   ########.fr       */
+/*   Updated: 2025/05/18 16:17:30 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <stdarg.h>
 
 int		ft_atoi(const char *str);
 void	ft_bzero(void *s, size_t n);
@@ -24,6 +25,13 @@ int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isprint(int c);
+int		ft_printf(const char *str, ...);
+int		ft_prthexa(unsigned int num, char *base);
+int		ft_printnbr(int n);
+int		ft_printptr(void *ptr, char *base);
+int		ft_putchar(char c);
+int		ft_printstr(char *str);
+int		ft_prtunsigned(unsigned int num);
 void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
@@ -51,5 +59,11 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+int		ft_printf(const char *str, ...);
+int		ft_prthexa(unsigned int num, char *base);
+int		ft_printnbr(int n);
+int		ft_printptr(void *ptr, char *base);
+int		ft_printstr(char *str);
+int		ft_prtunsigned(unsigned int num);
 
 #endif
