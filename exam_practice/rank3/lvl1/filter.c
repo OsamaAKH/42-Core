@@ -6,7 +6,7 @@
 /*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 17:46:15 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/12 17:59:49 by okhan            ###   ########.fr       */
+/*   Updated: 2026/01/15 12:00:47 by okhan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int ac, char **av)
 	{
 		char *tmp = realloc(input, len + bytes);
 		if (!tmp)
-			return(perror("Error"), free(input), 1);
+			return(perror("Error: "), free(input), 1);
 		input = tmp;
 		i = 0;
 		while (i < (size_t)bytes)
@@ -38,7 +38,7 @@ int	main(int ac, char **av)
 		}
 	}
 	if (bytes < 0)
-		return (perror("Error"), free(input), 1);
+		return (perror("Error: "), free(input), 1);
 	i = 0;
 	while (i < len)
 	{
