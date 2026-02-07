@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
+/*   By: muhakhan <muhakhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 21:24:23 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/30 22:49:21 by okhan            ###   ########.fr       */
+/*   Updated: 2026/02/05 16:37:36 by muhakhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "philo.h"
 
@@ -66,42 +65,52 @@ static int	is_dead(t_data *data, int i)
 	{
 		pthread_mutex_unlock(&data->meal_lock);
 		print_status(&data->philos[i], "died");
-		pthread_mutex_lock(&data->dead_lock);
-		data->dead_flag = 1;
-		pthread_mutex_unlock(&data->dead_lock);
+		set_dead_flag(data);
 		return (1);
 	}
 	pthread_mutex_unlock(&data->meal_lock);
 	return (0);
 }
 
-void	monitor_philos(t_data *data)
+static int	check_all_fed(t_data *data)
 {
 	int	i;
 	int	finished;
 
+	i = 0;
+	finished = 0;
+	while (i < data->num_philos)
+	{
+		pthread_mutex_lock(&data->meal_lock);
+		if (data->must_eat_count != -1
+			&& data->philos[i].meals_eaten >= data->must_eat_count)
+			finished++;
+		pthread_mutex_unlock(&data->meal_lock);
+		i++;
+	}
+	if (data->must_eat_count != -1 && finished == data->num_philos)
+	{
+		set_dead_flag(data);
+		return (1);
+	}
+	return (0);
+}
+
+void	monitor_philos(t_data *data)
+{
+	int	i;
+
 	while (1)
 	{
 		i = 0;
-		finished = 0;
 		while (i < data->num_philos)
 		{
 			if (is_dead(data, i))
 				return ;
-			pthread_mutex_lock(&data->meal_lock);
-			if (data->must_eat_count != -1
-				&& data->philos[i].meals_eaten >= data->must_eat_count)
-				finished++;
-			pthread_mutex_unlock(&data->meal_lock);
 			i++;
 		}
-		if (data->must_eat_count != -1 && finished == data->num_philos)
-		{
-			pthread_mutex_lock(&data->dead_lock);
-			data->dead_flag = 1;
-			pthread_mutex_unlock(&data->dead_lock);
+		if (check_all_fed(data))
 			return ;
-		}
 		usleep(1000);
 	}
 }

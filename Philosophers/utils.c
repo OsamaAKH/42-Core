@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
+/*   By: muhakhan <muhakhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 21:24:58 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/30 22:51:37 by okhan            ###   ########.fr       */
+/*   Updated: 2026/02/05 16:37:14 by muhakhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,11 @@ void	print_status(t_philo *philo, char *status)
 		printf("%lld %d %s\n", time, philo->id, status);
 	pthread_mutex_unlock(&philo->data->dead_lock);
 	pthread_mutex_unlock(&philo->data->write_lock);
+}
+
+void	set_dead_flag(t_data *data)
+{
+	pthread_mutex_lock(&data->dead_lock);
+	data->dead_flag = 1;
+	pthread_mutex_unlock(&data->dead_lock);
 }

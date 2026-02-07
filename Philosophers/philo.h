@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okhan <okhan@student.42.fr>                +#+  +:+       +#+        */
+/*   By: muhakhan <muhakhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 21:16:56 by okhan             #+#    #+#             */
-/*   Updated: 2026/01/30 21:20:04 by okhan            ###   ########.fr       */
+/*   Updated: 2026/02/05 16:37:09 by muhakhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int			ft_atoi(const char *str);
 long long	get_time(void);
 void		ft_usleep(long long time, t_data *data);
 void		print_status(t_philo *philo, char *status);
+void		set_dead_flag(t_data *data);
 
 /* Init */
 int			init_data(t_data *data, int ac, char **av);
